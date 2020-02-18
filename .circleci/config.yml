@@ -15,12 +15,14 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
+            pip install awscli
+            aws --version
       - run: echo done    
       - run:
           name: push to aws
           command: |
             . venv/bin/activate
-            aws deploy push --application-name MPC-test --description "This is a revision for the application MPC-test" --ignore-hidden-files --s3-location s3://ohi-inspire-codedeploy/test.zip --source .
+            aws deploy push --application-name MPC-test --description "This is a revision for the application MPC-test" --ignore-hidden-files --s3-location s3://ohi-npn-upload-image/test.zip --source .
 workflows:
   version: 2
   Project:
