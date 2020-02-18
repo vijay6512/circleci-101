@@ -4,8 +4,7 @@ jobs:
     docker:
       - image: circleci/python:3.6.1
     environment:
-        FLASK_CONFIG: testingNew
-    working_directory: /tmp
+        FLASK_CONFIG: testingNew 
     steps:
       - checkout
       - run: echo ${FLASK_CONFIG}
@@ -16,20 +15,12 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
-      - run: echo done 
+      - run: echo done    
       - run:
-          name: Creating Dummy Artifacts
+          name: push to aws
           command: |
-            echo "my artifact file" > /tmp/artifact-1;
-            mkdir /tmp/artifacts;
-            echo "my artifact files in a dir" > /tmp/artifacts/artifact-2;
-
-      - store_artifacts:
-          path: /tmp/artifact-1
-          destination: artifact-file
-
-      - store_artifacts:
-          path: /tmp/artifacts
+            . venv/bin/activate
+            aws deploy push --application-name MPC-test --description "This is a revision for the application MPC-test" --ignore-hidden-files --s3-location s3://ohi-inspire-codedeploy/test.zip --source .
 workflows:
   version: 2
   Project:
