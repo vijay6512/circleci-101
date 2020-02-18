@@ -4,7 +4,8 @@ jobs:
     docker:
       - image: circleci/python:3.6.1
     environment:
-        FLASK_CONFIG: testing
+        FLASK_CONFIG: testingNew
+    working_directory: /tmp
     steps:
       - checkout
       - run: echo ${FLASK_CONFIG}
@@ -15,7 +16,20 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
-      - run: echo done
+      - run: echo done 
+      - run:
+          name: Creating Dummy Artifacts
+          command: |
+            echo "my artifact file" > /tmp/artifact-1;
+            mkdir /tmp/artifacts;
+            echo "my artifact files in a dir" > /tmp/artifacts/artifact-2;
+
+      - store_artifacts:
+          path: /tmp/artifact-1
+          destination: artifact-file
+
+      - store_artifacts:
+          path: /tmp/artifacts
 workflows:
   version: 2
   Project:
